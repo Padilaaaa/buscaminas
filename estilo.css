@@ -1,0 +1,41 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    background-image: url(https://static.vecteezy.com/system/resources/previews/005/608/305/original/men-in-uniform-work-underground-mining-coal-flat-style-cartoon-illustration-vector.jpg);
+}
+
+#game {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-gap: 2px;
+    margin-bottom: 20px;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.cell.open {
+    background-color: #eee;
+    cursor: default;
+}
+
+.cell.mine {
+    background-color: red;
+    background-image: url(imagenes/bomba.png);
+    background-size: auto;
+
+}
+
