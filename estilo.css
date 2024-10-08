@@ -39,3 +39,55 @@ body {
 
 }
 
+#setlvl{
+
+color: white;
+
+
+}
+
+#level1{
+
+color: white;
+position: absolute;
+top :-5px;
+left: 25px;
+
+}
+
+#reset {
+    background-color: #3498db; 
+    color: white; 
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+ 
+    position: absolute;
+    left: 180px;
+    bottom: 545px;
+  }
+
+  #reset:hover {
+    background-color: #2980b9;
+  }
+
+  #level {
+    background-color: #3498db;
+     color:white;
+     border: none;
+     padding: 10px 10px;
+     font-size: 16px;
+     cursor: pointer;
+     transition: background-color 0.3s ease; 
+     position:absolute;
+     right: 1225px;
+     
+     bottom: 545px;
+  }
+
+  #level:hover {
+
+    background-color: #2980b9;
+  }
