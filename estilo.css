@@ -1,93 +1,169 @@
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: 100% 100%;
-    background-image: url(https://static.vecteezy.com/system/resources/previews/005/608/305/original/men-in-uniform-work-underground-mining-coal-flat-style-cartoon-illustration-vector.jpg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-image: url(https://static.vecteezy.com/system/resources/previews/005/608/305/original/men-in-uniform-work-underground-mining-coal-flat-style-cartoon-illustration-vector.jpg);
 }
 
 #game {
-    display: grid;
-    grid-template-columns: repeat(10, 30px);
-    grid-gap: 2px;
-    margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-gap: 2px;
+  margin-bottom: 20px;
 }
 
 .cell {
-    width: 30px;
-    height: 30px;
-    background-color: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 30px;
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 30px;
 }
 
-.cell.open {
-    background-color: #eee;
-    cursor: default;
+.cell.abierta {
+  background-color: #eee;
+  cursor: default;
 }
 
-.cell.mine {
-    background-color: red;
-    background-image: url(imagenes/bomba.png);
-    background-size: auto;
+.cell.mina {
+  background-color: red;
+  background-image: url(imagenes/bomba.png);
+  background-size: auto;
+}
+
+#setlvl {
+  color: white;
+}
+
+#level1 {
+  color: white;
+  position: absolute;
+  top: -5px;
+  left: 25px;
+}
+
+#reset {
+  background-color: #3498db; 
+  color: white; 
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+  position: absolute;
+  left: 43px;
+  bottom: 350px;
+}
+
+#reset:hover {
+  background-color: #2980b9;
+}
+
+#level {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+  position: absolute;
+  right: 1100px;
+  bottom: 480px;
+}
+
+#level:hover {
+  background-color: #2980b9;
+}
+
+@media (max-width: 1024px) {
+  #game {
+      grid-template-columns: repeat(10, 25px);
+  }
+
+  .cell {
+      width: 25px;
+      height: 25px;
+      font-size: 25px;
+  }
+
+  #reset, #level {
+      font-size: 14px;
+      padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  #game {
+      grid-template-columns: repeat(8, 20px);
+      grid-gap: 5px;
+  }
+
+  .cell {
+      width: 30px;
+      height: 20px;
+      font-size: 20px;
+  }
+
+  #reset, #level {
+      font-size: 12px;
+      padding: 6px 12px;
+      bottom: 200px;
+      left: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #game {
+      grid-template-columns: repeat(6, 18px);
+      position: relative;
+
+      top: 150px;
+      
+  }
+
+  .cell {
+      width: 25px;
+      height: 25px;
+      font-size: 18px;
+  }
+
+  #reset {
+      font-size: 10px;
+      padding: 12px 20px;
+      position: relative;
+      bottom: 250px;
+      left: 150px;
+      right: autos;
+  }
+
+#level{
+  font-size: 10px;
+  padding: 12px 20px;
+  position: relative;
+  bottom: 320px;
+  left: auto;
+  right: 115px;
+
+
+
 
 }
 
 #setlvl{
 
-color: white;
+position: relative;
 
-
-}
-
-#level1{
-
-color: white;
-position: absolute;
-top :-5px;
-left: 25px;
+top: 150px;
 
 }
 
-#reset {
-    background-color: #3498db; 
-    color: white; 
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease; 
- 
-    position: absolute;
-    left: 180px;
-    bottom: 545px;
-  }
 
-  #reset:hover {
-    background-color: #2980b9;
-  }
-
-  #level {
-    background-color: #3498db;
-     color:white;
-     border: none;
-     padding: 10px 10px;
-     font-size: 16px;
-     cursor: pointer;
-     transition: background-color 0.3s ease; 
-     position:absolute;
-     right: 1225px;
-     
-     bottom: 545px;
-  }
-
-  #level:hover {
-
-    background-color: #2980b9;
-  }
+}

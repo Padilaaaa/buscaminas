@@ -1,47 +1,58 @@
-let rows, cols, minesCount;
-let grid = [];
-let gameOver = false;
+let filas, columnas, cantidadMinas;
+let tablero = [];
+let juegoTerminado = false;
 
-function setDifficulty(level) {
+function establecerDificultad(level) {
     switch (level) {
         case 'facil':
-            rows = 8;
-            cols = 8;
-            minesCount = 10;
+            filas = 8;
+            columnas = 8;
+            cantidadMinas = 10;
             break;
         case 'medio':
-            rows = 16;
-            cols = 16;
-            minesCount = 40;
+            filas = 12;
+            columnas = 12;
+            cantidadMinas = 24;
             break;
         case 'dificil':
-            rows = 22;
-            cols = 22;
-            minesCount = 96;
+            filas = 14;
+            columnas = 14;
+            cantidadMinas = 32;
             break;
-        default:
-            rows = 10;
-            cols = 10;
-            minesCount = 10;
     }
 }
 
-function createGrid() {
-    grid = Array.from({ length: rows }, () => Array(cols).fill(0));
+function crearTablero() {
+    // Inicializar el tablero con ceros
+    tablero = [];
+    for (let i = 0; i < filas; i++) {
+        let fila = [];
+        for (let j = 0; j < columnas; j++) {
+            fila.push(0);
+        }
+        tablero.push(fila);
+    }
 
-    // Colocar minas
-    let minesPlaced = 0;
-    while (minesPlaced < minesCount) {
-        const x = Math.floor(Math.random() * rows);
-        const y = Math.floor(Math.random() * cols);
-        if (grid[x][y] === 0) {
-            grid[x][y] = 'X'; // Mina
-            minesPlaced++;
-            // Incrementar los contadores alrededor
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    if (x + i >= 0 && x + i < rows && y + j >= 0 && y + j < cols && grid[x + i][y + j] !== 'X') {
-                        grid[x + i][y + j]++;
+    // Colocar minas en el tablero
+    let minasColocadas = 0;
+    while (minasColocadas < cantidadMinas) {
+        const filaAleatoria = Math.floor(Math.random() * filas);
+        const columnaAleatoria = Math.floor(Math.random() * columnas);
+
+        if (tablero[filaAleatoria][columnaAleatoria] === 0) {
+            tablero[filaAleatoria][columnaAleatoria] = 'M'; // Colocar mina
+            minasColocadas++;
+
+            // Incrementar los contadores alrededor de la mina
+            for (let incrementoFila = -1; incrementoFila <= 1; incrementoFila++) {
+                for (let incrementoColumna = -1; incrementoColumna <= 1; incrementoColumna++) {
+                    const nuevaFila = filaAleatoria + incrementoFila;
+                    const nuevaColumna = columnaAleatoria + incrementoColumna;
+
+                    if (nuevaFila >= 0 && nuevaFila < filas &&
+                        nuevaColumna >= 0 && nuevaColumna < columnas &&
+                        tablero[nuevaFila][nuevaColumna] !== 'M') {
+                        tablero[nuevaFila][nuevaColumna]++;
                     }
                 }
             }
@@ -49,47 +60,85 @@ function createGrid() {
     }
 }
 
-function createBoard() {
-    const gameDiv = document.getElementById('game');
-    gameDiv.innerHTML = ''; // Limpiar el tablero
-    gameDiv.style.gridTemplateColumns = `repeat(${cols}, 30px)`; // Ajustar columnas según la dificultad
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.dataset.row = i;
-            cell.dataset.col = j;
-            cell.addEventListener('click', handleCellClick);
-            gameDiv.appendChild(cell);
+function generarTableroVisual() {
+    const divJuego = document.getElementById('game');
+    divJuego.innerHTML = ''; // Limpiar el tablero visual
+    divJuego.style.gridTemplateColumns = `repeat(${columnas}, 30px)`; // Ajustar las columnas según la dificultad
+
+    for (let fila = 0; fila < filas; fila++) {
+        for (let columna = 0; columna < columnas; columna++) {
+            const celda = document.createElement('div');
+            celda.classList.add('cell');
+            celda.dataset.fila = fila;
+            celda.dataset.columna = columna;
+            celda.addEventListener('click', manejarClickCelda);
+            divJuego.appendChild(celda);
         }
     }
 }
 
-function handleCellClick(event) {
-    if (gameOver) return;
-    const cell = event.target;
-    const row = cell.dataset.row;
-    const col = cell.dataset.col;
+function manejarClickCelda(evento) {
+    if (juegoTerminado) return;
 
-    if (grid[row][col] === 'X') {
-        cell.classList.add('mine');
+    const celda = evento.target;
+    const fila = parseInt(celda.dataset.fila);
+    const columna = parseInt(celda.dataset.columna);
+
+    if (tablero[fila][columna] === 'M') {
+        celda.classList.add('mina');
+        revelarTodasLasMinas();
         alert('¡Has perdido!');
-        gameOver = true;
+        juegoTerminado = true;
     } else {
-        cell.classList.add('open');
-        cell.textContent = grid[row][col] || '';
+        revelarCelda(fila, columna);
     }
 }
 
-function resetGame() {
-    const difficultySelect = document.getElementById('level');
-    const level = difficultySelect.value;
-    setDifficulty(level);
-    gameOver = false;
-    createGrid();
-    createBoard();
+function revelarCelda(fila, columna) {
+    const celda = document.querySelector(`[data-fila='${fila}'][data-columna='${columna}']`);
+    if (!celda || celda.classList.contains('abierta')) return;
+
+    celda.classList.add('abierta');
+    celda.textContent = tablero[fila][columna] || ''; // Mostrar número o dejar vacío si es 0
+
+    // Si la celda es 0, revelar las celdas adyacentes recursivamente
+    if (tablero[fila][columna] === 0) {
+        for (let incrementoFila = -1; incrementoFila <= 1; incrementoFila++) {
+            for (let incrementoColumna = -1; incrementoColumna <= 1; incrementoColumna++) {
+                const nuevaFila = fila + incrementoFila;
+                const nuevaColumna = columna + incrementoColumna;
+
+                if (nuevaFila >= 0 && nuevaFila < filas && 
+                    nuevaColumna >= 0 && nuevaColumna < columnas) {
+                    revelarCelda(nuevaFila, nuevaColumna);
+                }
+            }
+        }
+    }
 }
 
-document.getElementById('reset').addEventListener('click', resetGame);
-document.getElementById('level').addEventListener('change', resetGame); // Reiniciar al cambiar dificultad
-resetGame(); // Iniciar el juego
+function revelarTodasLasMinas() {
+    const celdas = document.getElementsByClassName('cell');
+    for (let i = 0; i < celdas.length; i++) {
+        const celda = celdas[i];
+        const fila = celda.dataset.fila;
+        const columna = celda.dataset.columna;
+
+        if (tablero[fila][columna] === 'M') {
+            celda.classList.add('mina');
+        }
+    }
+}
+
+function reiniciarJuego() {
+    const selectorDificultad = document.getElementById('level');
+    const nivel = selectorDificultad.value;
+    establecerDificultad(nivel);
+    juegoTerminado = false;
+    crearTablero();
+    generarTableroVisual();
+}
+
+document.getElementById('reset').addEventListener('click', reiniciarJuego);
+document.getElementById('level').addEventListener('change', reiniciarJuego);
+reiniciarJuego(); // Inicializar el juego al cargar la página
